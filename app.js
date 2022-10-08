@@ -2,7 +2,7 @@ const express = require("express");
 require('dotenv').config();
 const app = express();
 
-const port = process.env.PORT || 3000;
+var port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -16,6 +16,6 @@ app.get("/", (req, res)=>{
 });
 
 app.listen(port, () => 
-console.log(`server is loaded on ${port}`)
+console.log(`server is running on ${port}`)
 );
 
