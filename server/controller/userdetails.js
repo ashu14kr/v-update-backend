@@ -1,6 +1,28 @@
 require("../db/db");
 const userDetailsModels = require("../models/userdetails");
 
+
+exports.getUserData = async (req, res) => {
+    username = req.query.username;
+    password = req.query.password;
+    try {
+        const data = await userDetailsModels.find({username: username, password: password});
+        res.json(data);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+exports.getUserDatabyId = async (req, res) => {
+    id = req.query._id;
+    try {
+        const data = await userDetailsModels.find({_id: id});
+        res.json(data);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 exports.postUserData = async (req, res) => {
     try {
         const data = new userDetailsModels({
@@ -15,10 +37,10 @@ exports.postUserData = async (req, res) => {
             noofemployees: req.body.noofemployees,
             username: req.body.username,
             password: req.body.password,
-            profileimg: req.files['docs'][0],
-            gstcertification: req.files['docs'][1],
-            pancard: req.files['docs'][2],
-            aadhaarcard: req.files['docs'][3],
+            profileimg: req.files['img'][0].path,
+            gstcertification: req.files['gst'][0].path,
+            pancard: req.files['pan'][0].path,
+            aadhaarcard: req.files['adhr'][0].path,
             status: req.body.status,
             expirydate: req.body.expirydate,
         });

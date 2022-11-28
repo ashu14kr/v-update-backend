@@ -10,7 +10,10 @@ const userSchema = mongoose.Schema({
     "mobileno": {},
     "email": {},
     "noofemployees": {},
-    "username": {},
+    "username": {
+        type: String,
+        unique: true
+    },
     "password": {},
     "profileimg": {},
     "gstcertification": {},
