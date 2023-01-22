@@ -17,6 +17,9 @@ const storage = multer.diskStorage({
 
 router.post("/postUserDetails/", upload.fields([{ name: 'img', maxCount: 1 }, { name: 'pan', maxCount: 1 }, { name: 'adhr', maxCount: 1 }, { name: 'gst', maxCount: 1 }]) ,UserdetailsController.postUserData);
 router.get("/getUserDetails/", UserdetailsController.getUserData);
+router.get("/admingetUserDetails/", UserdetailsController.admingetUserData);
 router.get("/getUserDetailsById/", UserdetailsController.getUserDatabyId);
+router.get("/getUserDetailsByUserId/", UserdetailsController.getUserDatabyUserId);
+router.patch("/updateUserData/", UserdetailsController.updateUserData);
 
 module.exports = router;

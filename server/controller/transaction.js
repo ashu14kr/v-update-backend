@@ -30,3 +30,13 @@ exports.getTransactionData = async (req, res) => {
         console.log(error);
     }
 }
+
+
+exports.allGetTransactionData = async (req, res) => {
+    try {
+        const data = await transactionModels.find({});
+        res.json(data);
+    } catch (error) {
+        console.log(error);
+    }
+}

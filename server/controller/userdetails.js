@@ -13,10 +13,30 @@ exports.getUserData = async (req, res) => {
     }
 }
 
+exports.admingetUserData = async (req, res) => {
+    try {
+        const data = await userDetailsModels.find({});
+        res.json(data);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 exports.getUserDatabyId = async (req, res) => {
     id = req.query._id;
     try {
         const data = await userDetailsModels.find({_id: id});
+        res.json(data);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+exports.getUserDatabyUserId = async (req, res) => {
+    username = req.query.username;;
+    try {
+        const data = await userDetailsModels.find({username: username});
         res.json(data);
     } catch (error) {
         console.log(error);
@@ -42,6 +62,7 @@ exports.postUserData = async (req, res) => {
             pancard: req.files['pan'][0].path,
             aadhaarcard: req.files['adhr'][0].path,
             status: req.body.status,
+            indivdualuser: req.body.indivdualuser,
             expirydate: req.body.expirydate,
         });
         await data.save().then(()=> {
@@ -53,3 +74,16 @@ exports.postUserData = async (req, res) => {
         console.log(error);
     }
 }
+
+
+exports.updateUserData = async (req, res) => {
+    const _id = req.query._id;
+        try {
+            const data = await userDetailsModels.findByIdAndUpdate(_id, req.body, {
+                new: true
+            });
+            res.json(data);
+        } catch (error) {
+            console.log(error);
+        }
+  }

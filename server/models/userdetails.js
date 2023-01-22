@@ -20,6 +20,7 @@ const userSchema = mongoose.Schema({
     "pancard": {},
     "aadhaarcard": {},
     "status": {},
+    "indivdualuser": {},
     "expirydate": {}
 });
 

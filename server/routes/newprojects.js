@@ -18,5 +18,7 @@ const storage = multer.diskStorage({
 
   router.post("/postnewproject/", upload.fields([{name: 'doc', maxCount: 1}]), newProjectsController.postNewProjects);
   router.get("/getnewprojects/", newProjectsController.getNewProjects);
+  router.get("/getnewprojectsByStatus/", newProjectsController.getNewProjectsByStatus);
+  router.patch("/newProjectUpadte/", newProjectsController.updateProjectStatus);
   
   module.exports = router;

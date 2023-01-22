@@ -18,7 +18,9 @@ const storage = multer.diskStorage({
 
 router.post("/postemployeedata/", upload.fields([{name: 'img', maxCount: 1}, {name: 'adhr', maxCount: 1}]), empolyeeController.postEmployee);
 router.get("/getemployeedata/", empolyeeController.getEmployeeData);
+router.get("/getemployeedataById/", empolyeeController.getEmployeeDataById);
 router.get("/getemployeeRefCount/", empolyeeController.getEmployeeRefData);
+router.patch("/updatempdata/", empolyeeController.updateEmpData);
 
 module.exports = router;
 

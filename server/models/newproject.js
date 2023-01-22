@@ -6,6 +6,7 @@ const newprojectSchema = mongoose.Schema({
     "projecttitle": {},
     "projectdescription": {},
     "team": {},
+    "teaming": {},
     "status": {},
     "enddate": {},
     "attachement": {}
