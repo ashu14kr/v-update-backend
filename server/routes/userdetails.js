@@ -21,5 +21,6 @@ router.get("/admingetUserDetails/", UserdetailsController.admingetUserData);
 router.get("/getUserDetailsById/", UserdetailsController.getUserDatabyId);
 router.get("/getUserDetailsByUserId/", UserdetailsController.getUserDatabyUserId);
 router.patch("/updateUserData/", UserdetailsController.updateUserData);
+router.post('/uploadmedia/', upload.single("img"), UserdetailsController.uploadimg);
 
 module.exports = router;

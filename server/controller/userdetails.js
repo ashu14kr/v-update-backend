@@ -76,6 +76,15 @@ exports.postUserData = async (req, res) => {
 }
 
 
+exports.uploadimg = async (req, res) => {
+    try {
+      res.json(req.file.filename);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
 exports.updateUserData = async (req, res) => {
     const _id = req.query._id;
         try {
