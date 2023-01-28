@@ -35,3 +35,16 @@ exports.getNewLeads = async (req, res) => {
         console.log(error);
     }
 }
+
+
+exports.updateLeadInfo = async (req, res) => {
+    const _id = req.query._id;
+        try {
+            const data = await leadsModel.findByIdAndUpdate(_id, req.body, {
+                new: true
+            });
+            res.json(data);
+        } catch (error) {
+            console.log(error);
+        }
+  }
