@@ -5,7 +5,7 @@ const cors = require("cors");
 const cron = require('node-cron');
 http = require("http");
 const accountSid = "ACc176680b7fb44f928ca9961dbcb7a569";
-const authToken = "7685422fc0cd8f87baf8f7f4b4248b68";
+const authToken = "7ef16c6ca5d9cc2dd36e3c3692507613";
 const client = require('twilio')(accountSid, authToken);
 
 app.use(cors());
@@ -57,8 +57,8 @@ app.get("/", (req, res) => {
 cron.schedule('* * * * *', () => {
   console.log("Working");
   http.get("http://localhost:4000/occations/getAllOccations", (res) => {
-  console.log("statusCode:", res.statusCode);
-  console.log("headers:", res.headers);
+  // console.log("statusCode:", res.statusCode);
+  // console.log("headers:", res.headers);
   res.on("data", (chunk) => {
     const parsedData = JSON.parse(chunk);
     parsedData.forEach(function (element) {
@@ -67,12 +67,13 @@ cron.schedule('* * * * *', () => {
         console.log("Future");
       } else if (date2.getTime() < currentTime.getTime()) {
         console.log("Past");
-        client.messages
+          client.messages
           .create({
             from: 'whatsapp:+14155238886',
             body: `${element.note}`,
             to: `whatsapp:+91${element.time}`
-          }).then(() => {
+          }).then((messages) => {
+            console.log(messages.messagingServiceSid);
             console.log("success");
             const req = http.request({
               hostname: 'localhost',
@@ -81,16 +82,13 @@ cron.schedule('* * * * *', () => {
               method: 'DELETE'
             }, (res) => {
               console.log(`statusCode: ${res.statusCode}`);
-            
               res.on('data', (d) => {
                 process.stdout.write(d);
               });
             });
-            
             req.on('error', (error) => {
               console.error(error);
             });
-            
             req.end();
           });
       }
