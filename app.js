@@ -9,7 +9,7 @@ const authToken = "7685422fc0cd8f87baf8f7f4b4248b68";
 const client = require('twilio')(accountSid, authToken);
 
 app.use(cors());
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 4000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static('uploads'));
@@ -56,9 +56,9 @@ app.get("/", (req, res) => {
 
 cron.schedule('* * * * *', () => {
   console.log("Working");
-  http.get("http://localhost:8000/occations/getAllOccations", (res) => {
-  // console.log("statusCode:", res.statusCode);
-  // console.log("headers:", res.headers);
+  http.get("http://localhost:4000/occations/getAllOccations", (res) => {
+  console.log("statusCode:", res.statusCode);
+  console.log("headers:", res.headers);
   res.on("data", (chunk) => {
     const parsedData = JSON.parse(chunk);
     parsedData.forEach(function (element) {
@@ -76,7 +76,7 @@ cron.schedule('* * * * *', () => {
             console.log("success");
             const req = http.request({
               hostname: 'localhost',
-              port: 8000,
+              port: 4000,
               path: `/occations/deleteOccation/?_id=${element._id}`,
               method: 'DELETE'
             }, (res) => {
