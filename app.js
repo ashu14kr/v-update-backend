@@ -2,12 +2,18 @@ const express = require("express");
 require('dotenv').config();
 const app = express();
 const cors = require("cors");
+const cron = require('node-cron');
+http = require("http");
+const accountSid = "ACc176680b7fb44f928ca9961dbcb7a569";
+const authToken = "7685422fc0cd8f87baf8f7f4b4248b68";
+const client = require('twilio')(accountSid, authToken);
 
 app.use(cors());
 const port = process.env.PORT || 8000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static('uploads'));
+const currentTime = new Date();
 
 const userdetails = require("./server/routes/userdetails.js");
 const transaction = require("./server/routes/transactions.js");
@@ -37,18 +43,63 @@ app.use("/terms", terms);
 app.use("/package", package);
 
 
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET,PUT,PATCH,POST,DELETE");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-  });
-
-app.get("/", (req, res)=>{
-    res.send("hello world");
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,PUT,PATCH,POST,DELETE");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
 });
 
-app.listen(port, () => 
-console.log(`server is running on ${port}`)
+app.get("/", (req, res) => {
+  res.send("hello world");
+});
+
+cron.schedule('* * * * *', () => {
+  console.log("Working");
+  http.get("http://localhost:8000/occations/getAllOccations", (res) => {
+  // console.log("statusCode:", res.statusCode);
+  // console.log("headers:", res.headers);
+  res.on("data", (chunk) => {
+    const parsedData = JSON.parse(chunk);
+    parsedData.forEach(function (element) {
+      const date2 = new Date(Date.parse(element.date));
+      if (date2.getTime() > currentTime.getTime()) {
+        console.log("Future");
+      } else if (date2.getTime() < currentTime.getTime()) {
+        console.log("Past");
+        client.messages
+          .create({
+            from: 'whatsapp:+14155238886',
+            body: `${element.note}`,
+            to: `whatsapp:+91${element.time}`
+          }).then(() => {
+            console.log("success");
+            const req = http.request({
+              hostname: 'localhost',
+              port: 8000,
+              path: `/occations/deleteOccation/?_id=${element._id}`,
+              method: 'DELETE'
+            }, (res) => {
+              console.log(`statusCode: ${res.statusCode}`);
+            
+              res.on('data', (d) => {
+                process.stdout.write(d);
+              });
+            });
+            
+            req.on('error', (error) => {
+              console.error(error);
+            });
+            
+            req.end();
+          });
+      }
+    });
+  });
+});
+});
+
+app.listen(port, () =>
+  console.log(`server is running on ${port}`)
 );
 

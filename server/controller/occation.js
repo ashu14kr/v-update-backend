@@ -12,7 +12,27 @@ exports.getoccations = async (req, res) => {
     }
 }
 
-exports.postOccations = async (req, res) => {
+
+exports.getAlloccations = async (req, res) => {
+    try {
+        const data = await occationModel.find({});
+        res.json(data);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+exports.deletedata = async (req, res) => {
+    _id = req.query._id;
+    try {
+       const data = await occationModel.deleteOne({_id: _id});
+       res.json(data.deletedCount);
+    } catch (error) {
+        console.log(error);
+    }
+  }
+
+exports.postOccations = async (req, res) => { 
     try {
         const data = new occationModel({
             adminid: req.body.adminid,
