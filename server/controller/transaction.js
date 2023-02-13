@@ -40,3 +40,16 @@ exports.allGetTransactionData = async (req, res) => {
         console.log(error);
     }
 }
+
+
+exports.updatetransactionInfo = async (req, res) => {
+    const _id = req.query._id;
+        try {
+            const data = await transactionModels.findByIdAndUpdate(_id, req.body, {
+                new: true
+            });
+            res.json(data);
+        } catch (error) {
+            console.log(error);
+        }
+  }

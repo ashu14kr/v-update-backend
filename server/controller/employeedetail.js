@@ -51,6 +51,16 @@ exports.getEmployeeDataById = async (req, res) => {
     }
 }
 
+exports.getEmployeeDataByuserId = async (req, res) => {
+    username = req.query.username;
+    try {
+        const data = await employeeModels.find({username: username});
+        res.json(data);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 exports.getEmployeeRefData = async (req, res) => {
     refuserid = req.query.refuserid;
     try {

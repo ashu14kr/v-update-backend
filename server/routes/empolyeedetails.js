@@ -20,6 +20,7 @@ router.post("/postemployeedata/", upload.fields([{name: 'img', maxCount: 1}, {na
 router.get("/getemployeedata/", empolyeeController.getEmployeeData);
 router.get("/getemployeedataById/", empolyeeController.getEmployeeDataById);
 router.get("/getemployeeRefCount/", empolyeeController.getEmployeeRefData);
+router.get("/getemployeeuserId/", empolyeeController.getEmployeeDataByuserId);
 router.patch("/updatempdata/", empolyeeController.updateEmpData);
 
 module.exports = router;

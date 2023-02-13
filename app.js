@@ -5,7 +5,7 @@ const cors = require("cors");
 const cron = require('node-cron');
 http = require("http");
 const accountSid = "ACc176680b7fb44f928ca9961dbcb7a569";
-const authToken = "7ef16c6ca5d9cc2dd36e3c3692507613";
+const authToken = "76d386ed98ba202edb75bef065c24698";
 const client = require('twilio')(accountSid, authToken);
 
 app.use(cors());
@@ -56,16 +56,31 @@ app.get("/", (req, res) => {
 
 cron.schedule('* * * * *', () => {
   console.log("Working");
-  http.get("http://localhost:4000/occations/getAllOccations", (res) => {
+        http.get("http://worldtimeapi.org/api/timezone/Asia/Kolkata", (res) => {
+  console.log("statusCode:", res.statusCode);
+  console.log("headers:", res.headers);
+  res.on("data", (chunk) => {
+    const parsedData = JSON.parse(chunk);
+          var date = new Date();
+          var utcTime = date.getTime() + (date.getTimezoneOffset() * 60000);
+          var timeOffset = 5.5;
+          var NewZealandTime = new Date(utcTime + (3600000 * timeOffset));
+          console.log(NewZealandTime);
+    http.get("http://localhost:4000/occations/getAllOccations", (res) => {
   // console.log("statusCode:", res.statusCode);
   // console.log("headers:", res.headers);
   res.on("data", (chunk) => {
     const parsedData = JSON.parse(chunk);
     parsedData.forEach(function (element) {
       const date2 = new Date(Date.parse(element.date));
-      if (date2.getTime() > currentTime.getTime()) {
+    console.log(date2);
+      if (date2 >  NewZealandTime ) {
+        console.log(NewZealandTime);
+        console.log(date2);
         console.log("Future");
-      } else if (date2.getTime() < currentTime.getTime()) {
+      } else {
+        console.log(NewZealandTime);
+              console.log(date2);
         console.log("Past");
           client.messages
           .create({
@@ -95,9 +110,10 @@ cron.schedule('* * * * *', () => {
     });
   });
 });
+  });
+});
 });
 
 app.listen(port, () =>
   console.log(`server is running on ${port}`)
 );
-

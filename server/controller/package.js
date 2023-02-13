@@ -11,6 +11,19 @@ exports.getPackages = async (req, res) => {
     }
 }
 
+
+exports.updatePakage = async (req, res) => {
+    const _id = req.query._id;
+        try {
+            const data = await packageModel.findByIdAndUpdate(_id, req.body, {
+                new: true
+            });
+            res.json(data);
+        } catch (error) {
+            console.log(error);
+        }
+  }
+
 exports.postPackages = async (req, res) => {
     try {
         const data = new packageModel({
